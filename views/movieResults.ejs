@@ -1,0 +1,78 @@
+<%- include ('partials/header')%>
+
+<p class="result">Filmy z "<%= keyword%>"</p>
+<div class="container">
+    <% if(results['Response']==='True'){ %>
+        <div id="data" hidden><%= JSON.stringify(movieDetails) %></div> <!-- send dato to the js file-->
+        <% movieDetails.forEach((data)=>{ %>
+            <div class="card">
+                <div class="card-image-box">
+                    <img class="card-image" src="<%= data['Poster']%>" onerror="this.src ='https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkmpiE3saxLv17jlQVpffuUAAtU95HJoaPRw&usqp=CAU'">
+                    <div class="black-filter">
+                        <p><a href="<%= data['Poster']%>" target="_blank"><i class="fas fa-eye"></i></a></p>
+                    </div>
+                </div>
+                <div class="card-description">
+                    <a><p class="card-title"><%= data['Title']%></p></a>
+                    <p class="card-rating"><span class="topic">Ocena IMDB:</span>  <i class="fas fa-star"></i> <span class="rating"><%= data['imdbRating']%></span></p>
+                    <p class="card-plot"><%= data['Plot'].substring(0,70)%>...</p>
+                    <p><span class="topic">Typ: </span> &nbsp;<%= data['Type']%> </p>
+                    <p><span class="topic">Gatunek: </span> &nbsp;<%= data['Genre']%> </p>
+                    <p class="heart"><span><i class="fas fa-thumbs-up"></i></i></span>  <%= data['imdbVotes']%></i></p>
+                </div>
+            </div>
+        <% }); %>
+    <% } else{ %>
+        <h1><%= results['Error']%></h1>
+    <% } %>
+</div>
+
+<div class="big-card">
+    <div class="movie-data">
+        <img class="cover-image" src="" onerror="this.src ='https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkmpiE3saxLv17jlQVpffuUAAtU95HJoaPRw&usqp=CAU'">
+        <img class="main-image" src="" onerror="this.src ='https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQkmpiE3saxLv17jlQVpffuUAAtU95HJoaPRw&usqp=CAU'">
+        <p class="close-icon"> x </p>
+        <div class="movie-details">
+            <p id="topic" class="movie-title"></p>
+            <div class="movie-inside">
+                <button type="button" name="button" id="button" onclick="emailCurrentPage()">Dodaj na Duckfilms</button>
+                <p class="card-rating"><span id="topic">Ocena IMDB: </span><i class="fas fa-star"></i> <span class="rating"></span></p>
+                <p class="movie-type">Typ: &nbsp;</p>
+                <p class="movie-genre">Gatunek: &nbsp;</p>
+                <p class="movie-lang">Język: &nbsp;</p>
+                <span id="topic">Opis:</span><br><p class="movie-plot"></p>
+                <p class="movie-release">Data wydania: &nbsp;</p>
+                <p class="movie-director">Reżyser: &nbsp;</p>
+                <p class="movie-cast">Obsada: &nbsp;</p>
+            </div>
+
+        </div>
+    </div>
+
+    <script language="javascript">
+            function emailCurrentPage(){
+              var tags = document.getElementsByClassName('movie-title');
+        var tagText = '';
+
+        // loop through each found element and get the innerText property
+        for (var i=0; i< tags.length; i++){
+            tagText += tags[i].innerText + ' ';
+        }
+
+        // trim the trailing whitespace
+        tagText = tagText.trim();
+                window.location.href="mailto:poksfirma@gmail.com?subject="+ 'Sugestia filmu "' + tagText + '"' + "&body="+escape(window.location.href);
+
+            but = document.getElementById('button');
+            but.classList.add('but');
+            setTimeout(function(){
+    but.classList.remove('but');
+}, 5000);
+}
+        </script>
+
+</div>
+
+
+
+<%- include ('partials/footer')%>
